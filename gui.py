@@ -46,7 +46,7 @@ class TextRedirector(object):
 class CameraGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("IP摄像头标定工具 (IP Camera Calibration Tool)")
+        self.root.title("IP摄像头标定工具 (IP Camera Calibration Tool) v1.0.0")
         self.root.geometry("1600x850")
 
         # --- 状态变量 ---
@@ -129,8 +129,18 @@ class CameraGUI:
         self.lbl_count = ttk.Label(p2, text=f"下一张: chess_{self.snapshot_count:02d}.jpg")
         self.lbl_count.pack(pady=5)
 
-        self.btn_snap = ttk.Button(p2, text="截图保存", command=self.take_snapshot)
-        self.btn_snap.pack(fill=tk.X, padx=5, pady=5)
+        # --- 修改开始：创建一个 Frame 容器来放水平按钮 ---
+        f_btns = tk.Frame(p2)
+        f_btns.pack(fill=tk.X, padx=5, pady=5)  # 容器占满宽度
+
+        # 截图按钮：放在左边，expand=True fill=tk.X 让它自动占满一半宽度
+        self.btn_snap = ttk.Button(f_btns, text="截图保存", command=self.take_snapshot)
+        self.btn_snap.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 3))  # 右边留点缝隙
+
+        # 清空按钮：放在左边 (紧挨着截图按钮)，同样占满另一半
+        self.btn_clear = ttk.Button(f_btns, text="清空截图", command=self.clear_snapshots)
+        self.btn_clear.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(3, 0))  # 左边留点缝隙
+        # --- 修改结束 ---
 
         # 3. 标定设置
         p3 = ttk.LabelFrame(self.control_panel, text="标定操作")
@@ -181,6 +191,33 @@ class CameraGUI:
         print("系统就绪。日志已重定向至此窗口...")
 
     # --- 逻辑功能区 ---
+
+    def clear_snapshots(self):
+        """清空截图目录并重置计数器"""
+        # 1. 安全确认弹窗
+        if not messagebox.askyesno("确认操作",
+                                   "确定要删除所有已采集的截图吗？\n\n此操作将永久删除 ./chess 目录下的所有 jpg 图片，且不可恢复！"):
+            return
+
+        print("正在清空截图目录...")
+
+        # 2. 查找并删除文件
+        files = glob.glob(os.path.join(self.save_dir, "chess_*.jpg"))
+        deleted_count = 0
+        for f in files:
+            try:
+                os.remove(f)
+                deleted_count += 1
+            except Exception as e:
+                print(f"删除失败 {f}: {e}")
+
+        # 3. 重置计数器
+        self.snapshot_count = 0
+
+        # 4. 更新 UI 显示
+        self.lbl_count.config(text=f"下一张: chess_{self.snapshot_count:02d}.jpg")
+
+        print(f"操作完成: 已删除 {deleted_count} 张图片，计数已重置为 0。")
 
     def start_scan(self):
         user = self.entry_user.get()
