@@ -1,2 +1,4 @@
 
 *.jpg
+dist/
+gui.spec

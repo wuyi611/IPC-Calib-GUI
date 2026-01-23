@@ -7,14 +7,15 @@ import glob
 import threading
 import sys
 import time
-
-user = "admin"
-psword = "admin"
 # 导入功能模块
 from camera import VideoStream
 from calibration import CameraCalibrator
 # 导入新扫描模块
 from scanner import DeviceScanner
+
+user = "admin"
+psword = "admin"
+
 
 
 # --- 1. 日志重定向类 (用于将 print 输出到 GUI) ---
