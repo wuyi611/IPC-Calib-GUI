@@ -8,6 +8,8 @@ import threading
 import sys
 import time
 
+user = "admin"
+psword = "admin"
 # 导入功能模块
 from camera import VideoStream
 from calibration import CameraCalibrator
@@ -94,12 +96,12 @@ class CameraGUI:
         f_auth.pack(fill=tk.X, padx=5, pady=2)
         ttk.Label(f_auth, text="ONVIF账号:").pack(side=tk.LEFT)
         self.entry_user = ttk.Entry(f_auth, width=10)
-        self.entry_user.insert(0, "admin")
+        self.entry_user.insert(0,user)
         self.entry_user.pack(side=tk.LEFT, padx=5)
 
         ttk.Label(f_auth, text="密码:").pack(side=tk.LEFT)
         self.entry_pass = ttk.Entry(f_auth, width=10, show="*")
-        self.entry_pass.insert(0, "123456")
+        self.entry_pass.insert(0, psword)
         self.entry_pass.pack(side=tk.LEFT, padx=5)
 
         self.btn_scan = ttk.Button(p1, text="扫描局域网/USB设备", command=self.start_scan)
@@ -135,7 +137,7 @@ class CameraGUI:
 
         ttk.Label(p3, text="角点数 (宽x高):").pack(anchor=tk.W, padx=5)
         self.entry_corners = ttk.Entry(p3)
-        self.entry_corners.insert(0, "8x6")  # 注意：修改这里以匹配你的棋盘格
+        self.entry_corners.insert(0, "9x9")# 注意：修改这里以匹配你的棋盘格
         self.entry_corners.pack(fill=tk.X, padx=5)
 
         ttk.Label(p3, text="方格尺寸 (mm):").pack(anchor=tk.W, padx=5)
