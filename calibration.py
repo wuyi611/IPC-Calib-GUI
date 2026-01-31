@@ -131,7 +131,7 @@ class CameraCalibrator(object):
 
         ret, self.matrix, self.dist, rvecs, tveces = cv.calibrateCamera(objs_corner, imgs_corner, self.image_size, None,
                                                                         None)
-        self.new_camera_matrix, roi = cv.getOptimalNewCameraMatrix(self.matrix, self.dist, self.image_size, alpha=1)
+        self.new_camera_matrix, roi = cv.getOptimalNewCameraMatrix(self.matrix, self.dist, self.image_size, alpha=0)
         self.roi = np.array(roi)
         self.is_calibrated = True
         return ret
@@ -139,7 +139,7 @@ class CameraCalibrator(object):
     def rectify_image(self, img):
         if not self.is_calibrated:
             return img
-        dst = cv.undistort(img, self.matrix, self.dist, self.new_camera_matrix)
+        dst = cv.undistort(img, self.matrix, self.dist, None, self.new_camera_matrix)
         # 可选：裁剪黑边
         # x, y, w, h = self.roi
         # if w > 0 and h > 0:

@@ -1,3 +1,25 @@
+import sys
+import os
+
+
+# 定义一个什么都不做的“黑洞”类
+class NullWriter:
+    def write(self, text):
+        pass
+
+    def flush(self):
+        pass
+
+
+# 如果是打包后的环境，或者没有控制台，就把 stderr 重定向到黑洞
+if sys.stderr is None:
+    sys.stderr = NullWriter()
+
+# 如果 sys.stdout 也是 None (例如用了 -w 打包)，也重定向一下防止 print 报错
+if sys.stdout is None:
+    sys.stdout = NullWriter()
+
+
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, scrolledtext
 import cv2
