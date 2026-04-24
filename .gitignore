@@ -2,3 +2,6 @@
 *.jpg
 dist/
 gui.spec
+build/
+build/
+IPCC_Tool.spec
