@@ -303,10 +303,10 @@ class CameraGUI:
                 # 简单检查是否真的打开了 (可选)
                 time.sleep(1)
                 if new_vs.cap.isOpened():
-                    print("连接成功！")
+                    print(f"连接成功！(backend: {new_vs.backend_name})")
                     self.root.after_idle(lambda: self._on_stream_started(new_vs))
                 else:
-                    print("连接失败: 无法打开视频源")
+                    print(f"连接失败: 无法打开视频源 (backend: {new_vs.backend_name})")
                     new_vs.stop()
                     self.root.after_idle(lambda: self._on_stream_failed())
             except Exception as e:
